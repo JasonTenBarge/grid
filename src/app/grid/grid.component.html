@@ -13,16 +13,19 @@
   <input type="text" matInput placeholder="Search" [formControl]="searchForm">
 </mat-form-field>
 <div cdkDropList cdkDropListOrientation="horizontal" class="flex-cointainer header example-list" (cdkDropListDropped)="drop($event)">
-  <div *ngFor="let column of columns" class="flex example-box" cdkDrag>{{column}}</div>
+  <div *ngFor="let column of columns" class="flex example-box" cdkDrag>
+    {{column}}
+    <button (click)="sortClick(column)"> Sort </button>
+  </div>
 </div>
-<form [formGroup]="dataForm">
+<form [formGroup]="displayForm">
   <cdk-virtual-scroll-viewport itemSize="60" class="example-viewport">
-    <ng-container *cdkVirtualFor="let row of displayForm.controls; let i=index; templateCacheSize:0"> <!--| filter: searchForm.value;-->
+    <ng-container *cdkVirtualFor="let row of displayForm.controls; let i=index; templateCacheSize:0">
       <div class="flex-cointainer" *ngIf="!edit">
         <div *ngFor="let column of columns" class="flex">{{row.get(column)?.value}}</div>
       </div>
       <div class="flex-cointainer" *ngIf="edit" [formGroup]="row">
-          <input *ngFor="let column of columns" class="flex" type="text" matInput [placeholder]="column" [formControlName]="column"> 
+          <input *ngFor="let column of columns" class="flex" type="text" [placeholder]="column" [formControlName]="column"> 
       </div>
     </ng-container>
   </cdk-virtual-scroll-viewport>

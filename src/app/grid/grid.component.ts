@@ -22,6 +22,7 @@ export class GridComponent implements OnInit {
   edit = false;
   searchForm = new FormControl('');
   displayForm = this.fb.array([]);
+  sortColumn: string;
 
   constructor(private fb: FormBuilder) {
     this.populateForms(generateTestData(this.rows));
@@ -56,16 +57,17 @@ export class GridComponent implements OnInit {
   }
 
   displayData() {
+    this.displayForm.controls = this.dataForm.controls;
     this.filterData();
-    this.sortData('age');
+    this.sortData();
     this.groupData();
   }
 
   filterData() {
     if (!this.displayForm.controls || !this.searchForm.value) {
-      this.displayForm.controls = this.dataForm.controls;
+      return null;
     }
-    this.displayForm.controls = this.dataForm.controls.filter(row =>
+    this.displayForm.controls = this.displayForm.controls.filter(row =>
       Object.values(row.value)
       .map(value => String(value)
       .indexOf(this.searchForm.value) >= 0)
@@ -73,16 +75,24 @@ export class GridComponent implements OnInit {
       .length > 0);
   }
 
-  sortData(column: string) {
+  sortData() {
+    if (!this.sortColumn) {
+      return null;
+    }
     this.displayForm.controls = this.displayForm.controls.sort((row1, row2) => {
-      if (row1.get(column).value > row2.get(column).value) {
+      if (row1.get(this.sortColumn).value > row2.get(this.sortColumn).value) {
         return 1;
-      } else if (row1.get(column).value < row2.get(column).value) {
+      } else if (row1.get(this.sortColumn).value < row2.get(this.sortColumn).value) {
         return -1;
       } else {
         return 0;
       }
-    });
+    }).slice(); // slice needed to let angular know array changed
+  }
+
+  sortClick(column: string) {
+    this.sortColumn = column;
+    this.displayData();
   }
 
   groupData() {
