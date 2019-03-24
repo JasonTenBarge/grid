@@ -4,6 +4,7 @@ import { FormArray } from '@angular/forms';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 import {Sort} from '@angular/material';
 import {filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { GridColumn } from './grid-column';
 
 @Component({
   selector: 'app-grid',
@@ -14,7 +15,17 @@ import {filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 export class GridComponent implements OnInit {
   rows = 5000;
   dataForm: FormArray;
-  @Input() columns = ['id', 'username', 'title', 'age', 'condition', 'description', 'level', 'zone'];
+  @Input() columns = [
+    {name: 'id', title: 'ID', type: 'number'},
+    {name: 'username', title: 'Username', type: 'string'},
+    {name: 'title', title: 'Title', type: 'string'},
+    {name: 'age', title: 'Age', type: 'number'},
+    {name: 'condition', title: 'Condition', type: 'string'},
+    {name: 'description', title: 'Description', type: 'string'},
+    {name: 'level', title: 'Level', type: 'number'},
+    {name: 'zone', title: 'Zone', type: 'number'},
+    {name: 'checkbox', title: 'Checkbox', type: 'boolean'}
+  ];
   @Input()
   set data(input: any[]) {
     this.populateForms(input);
@@ -38,10 +49,10 @@ export class GridComponent implements OnInit {
 
   populateForms(input: any[]) {
     this.dataForm = this.fb.array([]);
-    input.forEach(x => {
+    input.forEach(row => {
       this.dataForm.push(
         this.fb.group(
-          x
+          row
         )
       );
     });
@@ -99,17 +110,6 @@ export class GridComponent implements OnInit {
   }
 }
 
-export interface GridRow {
-  id: number;
-  username: string;
-  title: string;
-  age: number;
-  condition: string;
-  description: string;
-  level: number;
-  zone: number;
-}
-
 export function generateTestData(rows: number = 5000) {
 
   const usernames = [
@@ -147,7 +147,8 @@ export function generateTestData(rows: number = 5000) {
       zone: i,
       description: usernames[Math.floor(Math.random() * 10)],
       condition: titles[Math.floor(Math.random() * 10)],
-      level: Math.floor(Math.random() * 100) + 1
+      level: Math.floor(Math.random() * 100) + 1,
+      checkbox: false
     };
   });
 }

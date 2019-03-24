@@ -14,18 +14,25 @@
 </mat-form-field>
 <div cdkDropList cdkDropListOrientation="horizontal" class="flex-cointainer header example-list" (cdkDropListDropped)="drop($event)">
   <div *ngFor="let column of columns" class="flex example-box" cdkDrag>
-    {{column}}
-    <button (click)="sortClick(column)"> Sort </button>
+    {{column.title}}
+    <button (click)="sortClick(column.name)"> Sort </button>
   </div>
 </div>
 <form [formGroup]="displayForm">
   <cdk-virtual-scroll-viewport itemSize="60" class="example-viewport">
     <ng-container *cdkVirtualFor="let row of displayForm.controls; let i=index; templateCacheSize:0">
       <div class="flex-cointainer" *ngIf="!edit">
-        <div *ngFor="let column of columns" class="flex">{{row.get(column)?.value}}</div>
+        <div *ngFor="let column of columns" class="flex">{{row.get(column.name)?.value}}</div>
       </div>
       <div class="flex-cointainer" *ngIf="edit" [formGroup]="row">
-          <input *ngFor="let column of columns" class="flex" type="text" [placeholder]="column" [formControlName]="column"> 
+        <ng-container *ngFor="let column of columns">
+            <ng-container [ngSwitch]="column.type">
+              <input *ngSwitchCase="'number'" class="flex" type="number" [placeholder]="column.name" [formControlName]="column.name">
+              <input *ngSwitchCase="'string'" class="flex" type="text" [placeholder]="column.name" [formControlName]="column.name">
+              <input *ngSwitchCase="'boolean'" class="flex" type="checkbox" [formControlName]="column.name">
+              <input *ngSwitchDefault class="flex" type="text" [placeholder]="column.name" [formControlName]="column.name">
+            </ng-container>
+        </ng-container>
       </div>
     </ng-container>
   </cdk-virtual-scroll-viewport>

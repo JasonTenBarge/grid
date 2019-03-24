@@ -13,6 +13,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import { FilterPipe } from './grid/filter.pipe';
 import { SortPipe } from './grid/sort.pipe';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { SortPipe } from './grid/sort.pipe';
     MatSlideToggleModule,
     MatInputModule,
     MatFormFieldModule,
-    DragDropModule
+    DragDropModule,
+    MatCheckboxModule
   ],
   providers: [],
   bootstrap: [AppComponent]
