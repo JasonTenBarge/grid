@@ -20,7 +20,7 @@
 </div>
 <form [formGroup]="displayForm">
   <cdk-virtual-scroll-viewport itemSize="60" class="example-viewport">
-    <ng-container *cdkVirtualFor="let row of displayForm.controls; let i=index; templateCacheSize:0">
+    <ng-container *cdkVirtualFor="let row of displayForm.controls; let i=index;">
       <div class="flex-cointainer" *ngIf="!edit">
         <div *ngFor="let column of columns" class="flex">{{row.get(column.name)?.value}}</div>
       </div>
