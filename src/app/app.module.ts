@@ -10,11 +10,14 @@ import {ScrollDispatchModule} from '@angular/cdk/scrolling';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import {DragDropModule} from '@angular/cdk/drag-drop';
+import { FilterPipe } from './grid/filter.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
-    GridComponent
+    GridComponent,
+    FilterPipe
   ],
   imports: [
     BrowserModule,
@@ -25,7 +28,8 @@ import {MatFormFieldModule} from '@angular/material/form-field';
     ScrollDispatchModule,
     MatSlideToggleModule,
     MatInputModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    DragDropModule
   ],
   providers: [],
   bootstrap: [AppComponent]
