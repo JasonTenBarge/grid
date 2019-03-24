@@ -22,7 +22,7 @@ export class GridComponent implements OnInit {
     {name: 'age', title: 'Age', type: 'number'},
     {name: 'condition', title: 'Condition', type: 'string'},
     {name: 'description', title: 'Description', type: 'string'},
-    {name: 'level', title: 'Level', type: 'number'},
+    // {name: 'level', title: 'Level', type: 'number'},
     {name: 'zone', title: 'Zone', type: 'number'},
     {name: 'checkbox', title: 'Checkbox', type: 'boolean'}
   ];
@@ -147,7 +147,7 @@ export function generateTestData(rows: number = 5000) {
       zone: i,
       description: usernames[Math.floor(Math.random() * 10)],
       condition: titles[Math.floor(Math.random() * 10)],
-      level: Math.floor(Math.random() * 100) + 1,
+      // level: Math.floor(Math.random() * 100) + 1,
       checkbox: false
     };
   });

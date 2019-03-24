@@ -21,16 +21,16 @@
 <form [formGroup]="displayForm">
   <cdk-virtual-scroll-viewport itemSize="60" class="example-viewport">
     <ng-container *cdkVirtualFor="let row of displayForm.controls; let i=index;">
-      <div class="flex-cointainer" *ngIf="!edit">
-        <div *ngFor="let column of columns" class="flex">{{row.get(column.name)?.value}}</div>
+      <div class="row" *ngIf="!edit">
+        <div *ngFor="let column of columns" class="cell">{{row.get(column.name)?.value}}</div>
       </div>
-      <div class="flex-cointainer" *ngIf="edit" [formGroup]="row">
+      <div class="row" *ngIf="edit" [formGroup]="row">
         <ng-container *ngFor="let column of columns">
             <ng-container [ngSwitch]="column.type">
-              <input *ngSwitchCase="'number'" class="flex" type="number" [placeholder]="column.name" [formControlName]="column.name">
-              <input *ngSwitchCase="'string'" class="flex" type="text" [placeholder]="column.name" [formControlName]="column.name">
-              <input *ngSwitchCase="'boolean'" class="flex" type="checkbox" [formControlName]="column.name">
-              <input *ngSwitchDefault class="flex" type="text" [placeholder]="column.name" [formControlName]="column.name">
+              <input *ngSwitchCase="'number'" class="cell" type="number" [placeholder]="column.name" [formControlName]="column.name">
+              <input *ngSwitchCase="'string'" class="cell" type="text" [placeholder]="column.name" [formControlName]="column.name">
+              <mat-checkbox *ngSwitchCase="'boolean'" class="cell checkbox" type="checkbox" [formControlName]="column.name"></mat-checkbox>
+              <input *ngSwitchDefault class="cell" type="text" [placeholder]="column.name" [formControlName]="column.name">
             </ng-container>
         </ng-container>
       </div>
