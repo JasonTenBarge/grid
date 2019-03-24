@@ -3,7 +3,7 @@
     Edit
   </mat-slide-toggle>
   <div class="flex">
-    Rows: {{rows}}
+    Rows: {{displayForm.controls.length}}
   </div>
   <div class="flex">
     Number of Columns: {{columns?.length}}
@@ -17,11 +17,11 @@
 </div>
 <form [formGroup]="dataForm">
   <cdk-virtual-scroll-viewport itemSize="60" class="example-viewport">
-    <ng-container *cdkVirtualFor="let row of dataForm.controls | filter: searchForm.value; let i=index; templateCacheSize:0">
+    <ng-container *cdkVirtualFor="let row of displayForm.controls; let i=index; templateCacheSize:0"> <!--| filter: searchForm.value;-->
       <div class="flex-cointainer" *ngIf="!edit">
         <div *ngFor="let column of columns" class="flex">{{row.get(column)?.value}}</div>
       </div>
-      <div class="flex-cointainer" *ngIf="edit" [formGroupName]="i">
+      <div class="flex-cointainer" *ngIf="edit" [formGroup]="row">
           <input *ngFor="let column of columns" class="flex" type="text" matInput [placeholder]="column" [formControlName]="column"> 
       </div>
     </ng-container>

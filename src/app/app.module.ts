@@ -12,12 +12,14 @@ import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import { FilterPipe } from './grid/filter.pipe';
+import { SortPipe } from './grid/sort.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
     GridComponent,
-    FilterPipe
+    FilterPipe,
+    SortPipe
   ],
   imports: [
     BrowserModule,

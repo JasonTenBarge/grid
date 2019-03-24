@@ -15,17 +15,21 @@ export class GridComponent implements OnInit {
   rows = 5000;
   dataForm: FormArray;
   @Input() columns = ['id', 'username', 'title', 'age', 'condition', 'description', 'level', 'zone'];
-  _data: any = generateTestData(this.rows);
   @Input()
   set data(input: any[]) {
-    this._data = input;
     this.populateForms(input);
   }
   edit = false;
   searchForm = new FormControl('');
+  displayForm = this.fb.array([]);
 
   constructor(private fb: FormBuilder) {
-    this.populateForms(this._data);
+    this.populateForms(generateTestData(this.rows));
+    this.searchForm.valueChanges.pipe(
+      debounceTime(100)
+    ).subscribe(text => {
+      this.displayData();
+    });
   }
 
   ngOnInit() {
@@ -40,6 +44,7 @@ export class GridComponent implements OnInit {
         )
       );
     });
+    this.displayData();
   }
 
   changeEdit(e: any) {
@@ -50,24 +55,37 @@ export class GridComponent implements OnInit {
     moveItemInArray(this.columns, event.previousIndex, event.currentIndex);
   }
 
-  sortData(sort: Sort) {
-    // const data = this.desserts.slice();
-    // if (!sort.active || sort.direction === '') {
-    //   this.sortedData = data;
-    //   return;
-    // }
+  displayData() {
+    this.filterData();
+    this.sortData('age');
+    this.groupData();
+  }
 
-    // this.sortedData = data.sort((a, b) => {
-    //   const isAsc = sort.direction === 'asc';
-    //   switch (sort.active) {
-    //     case 'name': return compare(a.name, b.name, isAsc);
-    //     case 'calories': return compare(a.calories, b.calories, isAsc);
-    //     case 'fat': return compare(a.fat, b.fat, isAsc);
-    //     case 'carbs': return compare(a.carbs, b.carbs, isAsc);
-    //     case 'protein': return compare(a.protein, b.protein, isAsc);
-    //     default: return 0;
-    //   }
-    // });
+  filterData() {
+    if (!this.displayForm.controls || !this.searchForm.value) {
+      this.displayForm.controls = this.dataForm.controls;
+    }
+    this.displayForm.controls = this.dataForm.controls.filter(row =>
+      Object.values(row.value)
+      .map(value => String(value)
+      .indexOf(this.searchForm.value) >= 0)
+      .filter(x => x === true)
+      .length > 0);
+  }
+
+  sortData(column: string) {
+    this.displayForm.controls = this.displayForm.controls.sort((row1, row2) => {
+      if (row1.get(column).value > row2.get(column).value) {
+        return 1;
+      } else if (row1.get(column).value < row2.get(column).value) {
+        return -1;
+      } else {
+        return 0;
+      }
+    });
+  }
+
+  groupData() {
   }
 }
 
