@@ -1,55 +1,63 @@
-<mat-slide-toggle (change)="changeEdit($event)">
-  Edit
-</mat-slide-toggle>
-<div class="flex-cointainer header">
-    <div class="flex">ID</div>
-    <div class="flex">User Name</div>
-    <div class="flex">Age</div>
-    <div class="flex">Title</div>
-    <div class="flex">Condition</div>
-    <div class="flex">Description</div>
-    <div class="flex">Level</div>
-    <div class="flex">Zone</div>
+<div class="flex-cointainer">
+  <mat-slide-toggle (change)="changeEdit($event)" class="flex">
+    Edit
+  </mat-slide-toggle>
+  <div class="flex">
+    Rows: {{rows}}
+  </div>
+  <div class="flex">
+    Number of Columns: {{columns.length}}
+  </div>
 </div>
-<cdk-virtual-scroll-viewport itemSize="60" class="example-viewport">
-  <form [formGroup]="itemForm">
-      <ng-container *cdkVirtualFor="let row of itemForm.controls; let i=index; let i=index">
-        <div class="flex-cointainer" *ngIf="!edit">
-          <div class="flex">{{row.controls.id?.value}}</div>
-          <div class="flex">{{row.controls.username?.value}}</div>
-          <div class="flex">{{row.controls.age?.value}}</div>
-          <div class="flex">{{row.controls.title?.value}}</div>
-          <div class="flex">{{row.controls.condition?.value}}</div>
-          <div class="flex">{{row.controls.description?.value}}</div>
-          <div class="flex">{{row.controls.level?.value}}</div>
-          <div class="flex">{{row.controls.zone?.value}}</div>
-        </div>
-        <div class="flex-cointainer" *ngIf="edit" [formGroupName]="i">
-            <mat-form-field class="flex" appearance="outline">
-              <input type="number" matInput placeholder="id" formControlName="id">
-            </mat-form-field>
-            <mat-form-field class="flex" appearance="outline">
-              <input type="text" matInput placeholder="username" formControlName="username">
-            </mat-form-field>
-            <mat-form-field class="flex" appearance="outline">
-              <input type="number" matInput placeholder="age" formControlName="age">
-            </mat-form-field>
-            <mat-form-field class="flex" appearance="outline">
-              <input type="text" matInput placeholder="title" formControlName="title">
-            </mat-form-field>
-            <mat-form-field class="flex" appearance="outline">
-                <input type="text" matInput placeholder="condition" formControlName="condition">
-            </mat-form-field>
-            <mat-form-field class="flex" appearance="outline">
-                <input type="text" matInput placeholder="description" formControlName="description">
-            </mat-form-field>
-            <mat-form-field class="flex" appearance="outline">
-                <input type="text" matInput placeholder="level" formControlName="level">
-            </mat-form-field>
-            <mat-form-field class="flex" appearance="outline">
-                <input type="text" matInput placeholder="zone" formControlName="zone">
-              </mat-form-field>
-        </div>
-      </ng-container>
-  </form>
-</cdk-virtual-scroll-viewport>
+<div class="flex-cointainer header">
+  <div class="flex">ID</div>
+  <div class="flex">User Name</div>
+  <div class="flex">Age</div>
+  <div class="flex">Title</div>
+  <div class="flex">Condition</div>
+  <div class="flex">Description</div>
+  <div class="flex">Level</div>
+  <div class="flex">Zone</div>
+</div>
+<form [formGroup]="itemForm">
+  <cdk-virtual-scroll-viewport itemSize="60" class="example-viewport">
+    <ng-container *cdkVirtualFor="let row of itemForm.controls; let i=index;">
+      <div class="flex-cointainer" *ngIf="!edit">
+        <div class="flex">{{row.controls.id?.value}}</div>
+        <div class="flex">{{row.controls.username?.value}}</div>
+        <div class="flex">{{row.controls.age?.value}}</div>
+        <div class="flex">{{row.controls.title?.value}}</div>
+        <div class="flex">{{row.controls.condition?.value}}</div>
+        <div class="flex">{{row.controls.description?.value}}</div>
+        <div class="flex">{{row.controls.level?.value}}</div>
+        <div class="flex">{{row.controls.zone?.value}}</div>
+      </div>
+      <div class="flex-cointainer" *ngIf="edit" [formGroupName]="i">
+        <mat-form-field class="flex" appearance="outline">
+          <input type="number" matInput placeholder="id" formControlName="id">
+        </mat-form-field>
+        <mat-form-field class="flex" appearance="outline">
+          <input type="text" matInput placeholder="username" formControlName="username">
+        </mat-form-field>
+        <mat-form-field class="flex" appearance="outline">
+          <input type="number" matInput placeholder="age" formControlName="age">
+        </mat-form-field>
+        <mat-form-field class="flex" appearance="outline">
+          <input type="text" matInput placeholder="title" formControlName="title">
+        </mat-form-field>
+        <mat-form-field class="flex" appearance="outline">
+            <input type="text" matInput placeholder="condition" formControlName="condition">
+        </mat-form-field>
+        <mat-form-field class="flex" appearance="outline">
+            <input type="text" matInput placeholder="description" formControlName="description">
+        </mat-form-field>
+        <mat-form-field class="flex" appearance="outline">
+            <input type="number" matInput placeholder="level" formControlName="level">
+        </mat-form-field>
+        <mat-form-field class="flex" appearance="outline">
+            <input type="number" matInput placeholder="zone" formControlName="zone">
+        </mat-form-field>
+      </div>
+    </ng-container>
+  </cdk-virtual-scroll-viewport>
+</form>

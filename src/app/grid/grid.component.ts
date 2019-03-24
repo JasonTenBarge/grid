@@ -9,6 +9,8 @@ import { FormArray } from '@angular/forms';
 })
 export class GridComponent implements OnInit {
 
+  columns = ['id', 'username', 'title', 'age', 'condition', 'description', 'level', 'zone'];
+  rows = 5000;
   usernames = [
     'test',
     'idk',
@@ -56,7 +58,7 @@ export class GridComponent implements OnInit {
     {id: 7, username: 'wut', title: 'aaa', age: 30},
   ];
   // items = Array.from({length: 100000}).map((_, i) => `Item #${i}`);
-  testItems = Array.from({length: 5000}).map((_, i) => {
+  testItems = Array.from({length: this.rows}).map((_, i) => {
     return {
       id: i,
       username: this.usernames[Math.floor(Math.random() * 10)],
@@ -102,4 +104,8 @@ export interface GridRow {
   username: string;
   title: string;
   age: number;
+  condition: string;
+  description: string;
+  level: number;
+  zone: number;
 }
