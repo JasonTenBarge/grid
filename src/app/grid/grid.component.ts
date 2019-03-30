@@ -61,6 +61,7 @@ export class GridComponent implements OnInit {
     this.filterData();
     this.sortData();
     this.groupData();
+    this.displayForm.controls = this.displayForm.controls.slice(); // slice needed to let angular know array changed
   }
 
   filterData() {
@@ -87,7 +88,7 @@ export class GridComponent implements OnInit {
       } else {
         return 0;
       }
-    }).slice(); // slice needed to let angular know array changed
+    });
   }
 
   sortClick(column: string) {
