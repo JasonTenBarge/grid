@@ -14,13 +14,16 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
 import { FilterPipe } from './grid/filter.pipe';
 import { SortPipe } from './grid/sort.pipe';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import { GridTesterComponent } from './grid-tester/grid-tester.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     GridComponent,
     FilterPipe,
-    SortPipe
+    SortPipe,
+    GridTesterComponent
   ],
   imports: [
     BrowserModule,
@@ -33,7 +36,8 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     MatInputModule,
     MatFormFieldModule,
     DragDropModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatButtonToggleModule
   ],
   providers: [],
   bootstrap: [AppComponent]

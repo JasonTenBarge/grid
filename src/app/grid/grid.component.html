@@ -12,14 +12,14 @@
 <mat-form-field class="header">
   <input type="text" matInput placeholder="Search" [formControl]="searchForm">
 </mat-form-field>
-<div cdkDropList cdkDropListOrientation="horizontal" class="flex-cointainer header example-list" (cdkDropListDropped)="drop($event)">
-  <div *ngFor="let column of columns" class="flex example-box" cdkDrag>
+<div cdkDropList cdkDropListOrientation="horizontal" class="flex-cointainer header-list" (cdkDropListDropped)="drop($event)">
+  <div *ngFor="let column of columns" class="flex header-box" cdkDrag>
     {{column.title}}
     <button (click)="sortClick(column.name)"> Sort </button>
   </div>
 </div>
 <form [formGroup]="displayForm">
-  <cdk-virtual-scroll-viewport itemSize="60" class="example-viewport">
+  <cdk-virtual-scroll-viewport itemSize="60" class="scrollable-viewport">
     <ng-container *cdkVirtualFor="let row of displayForm.controls; let i=index;">
       <div class="row" *ngIf="!edit">
         <div *ngFor="let column of columns" class="cell">{{row.get(column.name)?.value}}</div>
