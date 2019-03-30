@@ -4,7 +4,7 @@
     Edit
   </mat-slide-toggle>
   <div class="flex">
-    Rows: {{displayForm.controls.length}}
+    Rows: {{displayForm.controls?.length}}
   </div>
   <div class="flex">
     Number of Columns: {{columns?.length}}
@@ -16,6 +16,8 @@
 <div cdkDropList cdkDropListOrientation="horizontal" class="flex-cointainer header-list" (cdkDropListDropped)="drop($event)">
   <div *ngFor="let column of columns" class="flex header-box" cdkDrag>
     {{column.title}}
+    <mat-icon *ngIf="column.sort==='asc'">arrow_upward</mat-icon>
+    <mat-icon *ngIf="column.sort==='desc'">arrow_downward</mat-icon>
     <button mat-icon-button [matMenuTriggerFor]="columnMenu" [matMenuTriggerData]="column"> <mat-icon>more_vert</mat-icon> </button>
   </div>
 </div>
@@ -32,11 +34,19 @@
               <input matInput type="number" [placeholder]="column.name" [formControlName]="column.name">
               <mat-hint></mat-hint>
             </mat-form-field>
-            <mat-form-field *ngSwitchCase="'string'" appearance="standard">
+            <mat-form-field *ngSwitchCase="'text'" appearance="standard">
               <input matInput type="text" [placeholder]="column.name" [formControlName]="column.name">
               <mat-hint></mat-hint>
             </mat-form-field>
-            <mat-checkbox *ngSwitchCase="'boolean'" class="checkbox" type="checkbox" [formControlName]="column.name"></mat-checkbox>
+            <mat-checkbox *ngSwitchCase="'checkbox'" class="checkbox" type="checkbox" [formControlName]="column.name"></mat-checkbox>
+            <mat-form-field *ngSwitchCase="'select'" appearance="standard">
+              <mat-select [formControlName]="column.name">
+                <mat-option *ngFor="let option of column.options" [value]="option">
+                  {{option}}
+                </mat-option>
+              </mat-select>
+              <mat-hint></mat-hint>
+            </mat-form-field>
             <mat-form-field *ngSwitchDefault appearance="standard">
               <input matInput type="text" [placeholder]="column.name" [formControlName]="column.name">
               <mat-hint></mat-hint>

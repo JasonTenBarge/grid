@@ -12,14 +12,15 @@ export class GridTesterComponent implements OnInit {
   data = generateTestData(this.rows);
   columns = [
     {name: 'id', title: 'ID', type: 'number'},
-    {name: 'username', title: 'Username', type: 'string'},
-    {name: 'title', title: 'Title', type: 'string'},
+    {name: 'username', title: 'Username', type: 'text'},
+    {name: 'drink', title: 'Drink', type: 'select', options: ['Tea', 'Coffee', 'Beer', 'Wine']},
+    {name: 'title', title: 'Title', type: 'text'},
     {name: 'age', title: 'Age', type: 'number'},
-    {name: 'condition', title: 'Condition', type: 'string'},
-    {name: 'description', title: 'Description', type: 'string'},
+    {name: 'condition', title: 'Condition', type: 'text'},
+    {name: 'description', title: 'Description', type: 'text'},
     // {name: 'level', title: 'Level', type: 'number'},
-    {name: 'zone', title: 'Zone', type: 'number'},
-    {name: 'checkbox', title: 'Checkbox', type: 'boolean'}
+    {name: 'zone', title: 'Zone', type: 'text'},
+    {name: 'checkbox', title: 'Checkbox', type: 'checkbox'}
   ];
   settingsForm = this.fb.group({
     class: ['material']
@@ -70,6 +71,7 @@ export function generateTestData(rows: number = 5000) {
       zone: i,
       description: usernames[Math.floor(Math.random() * 10)],
       condition: titles[Math.floor(Math.random() * 10)],
+      drink: '',
       // level: Math.floor(Math.random() * 100) + 1,
       checkbox: false
     };

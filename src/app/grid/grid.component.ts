@@ -2,9 +2,9 @@ import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { FormArray } from '@angular/forms';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
-import {Sort} from '@angular/material';
 import {filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { GridColumn } from './grid-column';
+import { Sort } from './sort';
 
 @Component({
   selector: 'app-grid',
@@ -23,7 +23,7 @@ export class GridComponent implements OnInit {
   edit = false;
   searchForm = new FormControl('');
   displayForm = this.fb.array([]);
-  sortColumn: string;
+  sortList: Sort[] = [];
 
   constructor(private fb: FormBuilder) {
     this.searchForm.valueChanges.pipe(
@@ -77,22 +77,50 @@ export class GridComponent implements OnInit {
   }
 
   sortData() {
-    if (!this.sortColumn) {
+    if (this.sortList.length === 0) {
       return null;
     }
     this.displayForm.controls = this.displayForm.controls.sort((row1, row2) => {
-      if (row1.get(this.sortColumn).value > row2.get(this.sortColumn).value) {
-        return 1;
-      } else if (row1.get(this.sortColumn).value < row2.get(this.sortColumn).value) {
-        return -1;
-      } else {
-        return 0;
+      for (const sorter of this.sortList) {
+        if (row1.get(sorter.name).value > row2.get(sorter.name).value) {
+          return sorter.direction === 'asc' ? 1 : -1;
+        } else if (row1.get(sorter.name).value < row2.get(sorter.name).value) {
+          return sorter.direction === 'asc' ? -1 : 1;
+        }
       }
+      return 0;
     });
   }
 
   sortClick(column: string) {
-    this.sortColumn = column;
+    let selectedColumn = this.sortList.find(x => x.name === column);
+    if (!selectedColumn) {
+      selectedColumn = {
+        name: column,
+        direction: ''
+      };
+      this.sortList.push(selectedColumn);
+    }
+    const columnFromColumns = this.columns.find(x => x.name === column);
+    switch (selectedColumn.direction) {
+      case 'asc': {
+        selectedColumn.direction = 'desc';
+        columnFromColumns.sort = 'desc';
+        break;
+      }
+      case 'desc': {
+        selectedColumn.direction = '';
+        columnFromColumns.sort = '';
+        const index = this.sortList.findIndex(x => x.name === column);
+        this.sortList.splice(index, 1);
+        break;
+      }
+      default : {
+        selectedColumn.direction = 'asc';
+        columnFromColumns.sort = 'asc';
+        break;
+      }
+    }
     this.displayData();
   }
 
