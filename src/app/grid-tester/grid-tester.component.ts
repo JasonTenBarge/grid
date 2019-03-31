@@ -15,7 +15,7 @@ export class GridTesterComponent implements OnInit {
     {name: 'username', title: 'Username', type: 'text'},
     {name: 'drink', title: 'Drink', type: 'select', options: ['Tea', 'Coffee', 'Beer', 'Wine']},
     {name: 'title', title: 'Title', type: 'text'},
-    {name: 'age', title: 'Age', type: 'number'},
+    {name: 'age', title: 'Age', type: 'number', hint: 'in years'},
     {name: 'condition', title: 'Condition', type: 'text'},
     {name: 'description', title: 'Description', type: 'text'},
     // {name: 'level', title: 'Level', type: 'number'},

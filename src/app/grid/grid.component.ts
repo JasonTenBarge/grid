@@ -173,6 +173,24 @@ export class GridComponent implements OnInit {
       }
       groupIndex++;
     }
+    // groupIndex = 0;
+    // for (const group of this.groupList) {
+    //   for (const row of this.displayForm.controls) {
+    //     if (row.get('group').value === true) {
+    //       const children = this.displayForm.controls.filter(x => {
+    //         for (let i = 0 ; i <= groupIndex; i++) {
+    //           if (x.get('data').get(this.columns[i].name).value !== row.get('data').get(this.columns[i].name).value ||
+    //             (x.get('group').value === true && x.get('level').value <= groupIndex))  {
+    //             return false;
+    //           }
+    //         }
+    //         return true;
+    //       });
+    //       (row.get('children') as FormArray).controls = children;
+    //     }
+    //   }
+    //   groupIndex++;
+    // }
   }
 
   openGroup(group: any, column: any, row: any) {

@@ -23,7 +23,7 @@
   </div>
 </div>
 <form [formGroup]="displayForm">
-  <cdk-virtual-scroll-viewport itemSize="60" class="scrollable-viewport">
+  <cdk-virtual-scroll-viewport itemSize="80" class="scrollable-viewport">
     <ng-container *cdkVirtualFor="let row of displayForm.controls; let i=index;">
       <ng-container *ngIf="row.get('group').value === false">
         <div class="row" *ngIf="!edit">
@@ -37,11 +37,11 @@
               <ng-container [ngSwitch]="column.type">
                 <mat-form-field *ngSwitchCase="'number'" appearance="standard">
                   <input matInput type="number" [placeholder]="column.name" [formControlName]="column.name">
-                  <mat-hint></mat-hint>
+                  <mat-hint>{{column.hint}}</mat-hint>
                 </mat-form-field>
                 <mat-form-field *ngSwitchCase="'text'" appearance="standard">
                   <input matInput type="text" [placeholder]="column.name" [formControlName]="column.name">
-                  <mat-hint></mat-hint>
+                  <mat-hint>{{column.hint}}</mat-hint>
                 </mat-form-field>
                 <mat-checkbox *ngSwitchCase="'checkbox'" class="checkbox" type="checkbox" [formControlName]="column.name"></mat-checkbox>
                 <mat-form-field *ngSwitchCase="'select'" appearance="standard">
@@ -50,11 +50,11 @@
                       {{option}}
                     </mat-option>
                   </mat-select>
-                  <mat-hint></mat-hint>
+                  <mat-hint>{{column.hint}}</mat-hint>
                 </mat-form-field>
                 <mat-form-field *ngSwitchDefault appearance="standard">
                   <input matInput type="text" [placeholder]="column.name" [formControlName]="column.name">
-                  <mat-hint></mat-hint>
+                  <mat-hint>{{column.hint}}</mat-hint>
                 </mat-form-field>
               </ng-container>
             </div>
