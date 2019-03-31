@@ -127,6 +127,11 @@ export class GridComponent implements OnInit {
   }
 
   addGroup(columnName: string) {
+    const group = this.groupList.find(x => x === columnName);
+    if (group) {
+      this.removeGroup(columnName);
+      return null;
+    }
     const column = this.columns.find(x => x.name === columnName);
     const columnIndex = this.columns.findIndex(x => x.name === columnName);
     this.columns.splice(columnIndex, 1);
@@ -143,6 +148,15 @@ export class GridComponent implements OnInit {
       this.groupList.push(columnName);
       this.displayData();
     }
+  }
+
+  removeGroup(columnName: string) {
+    const groupIndex = this.groupList.indexOf(columnName);
+    this.groupList.splice(groupIndex, 1);
+    for (let i = groupIndex; i < this.groupList.length ; i++) {
+      moveItemInArray(this.columns, i, i + 1);
+    }
+    this.displayData();
   }
 
   groupData() {
