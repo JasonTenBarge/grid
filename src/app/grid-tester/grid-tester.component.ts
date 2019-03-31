@@ -62,6 +62,8 @@ export function generateTestData(rows: number = 5000) {
     'vvv',
   ];
 
+  const drinks = ['Tea', 'Coffee', 'Beer', 'Wine'];
+
   return Array.from({length: rows}).map((_, i) => {
     return {
       id: i,
@@ -71,7 +73,7 @@ export function generateTestData(rows: number = 5000) {
       zone: i,
       description: usernames[Math.floor(Math.random() * 10)],
       condition: titles[Math.floor(Math.random() * 10)],
-      drink: '',
+      drink: drinks[Math.floor(Math.random() * 4)],
       // level: Math.floor(Math.random() * 100) + 1,
       checkbox: false
     };

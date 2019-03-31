@@ -1,105 +1,131 @@
-// :host-context(.material) {
-  .flex-cointainer {
-    display: flex;
-    height: 60px;
-  }
+.flex-cointainer {
+  display: flex;
+  height: 60px;
+}
 
-  .flex {
-    flex: 1;
-  }
+.flex {
+  flex: 1;
+}
+
+.scrollable-viewport {
+  height: 600px;
+  width: 1800px;
+  // border: 1px solid black;
+  border: 0;
+}
+
+.header {
+  width: 1780px;
+}
+
+.header-list {
+// width: 1000px;
+// max-width: 100%;
+width: 1780px;
+border: solid 1px #ccc;
+min-height: 60px;
+display: flex;
+flex-direction: row;
+// background: white;
+border-radius: 4px;
+overflow: hidden;
+}
+
+.header-box {
+padding: 20px 10px;
+border-right: solid 1px #ccc;
+// color: rgba(0, 0, 0, 0.87);
+display: flex;
+flex-direction: row;
+align-items: center;
+justify-content: space-between;
+box-sizing: border-box;
+cursor: move;
+// background: white;
+font-size: 14px;
+flex-grow: 1;
+flex-basis: 0;
+}
+
+.row {
+display: flex;
+height: 60px;
+// border: solid 1px #ccc;
+flex-direction: row;
+// background: white;
+border-radius: 4px;
+overflow: hidden;
+}
+
+.checkbox {
+justify-content: center !important;
+}
+
+.cell {
+flex: 1;
+// background: white;
+box-sizing: border-box;
+flex-direction: row;
+align-items: center;
+justify-content: center;
+display: flex;
+// padding: 20px 10px;
+// border-right: solid 1px #ccc;
+// color: rgba(0, 0, 0, 0.87);
+// border-width: 1px;
+// border-style: ;
+// border-color: ;
+// border-image: ;
+}
+
+.cdk-drag-preview {
+box-sizing: border-box;
+border-radius: 4px;
+box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+            0 8px 10px 1px rgba(0, 0, 0, 0.14),
+            0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.header-box:last-child {
+  border: none;
+}
+
+.header-list.cdk-drop-list-dragging .header-box:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+:host-context(.light) {
+  color: rgba(0, 0, 0, 0.87);
+  background: white;
 
   .scrollable-viewport {
-    height: 600px;
-    width: 1800px;
-    border: 1px solid black;
-    border: 0;
-  }
-
-  .header {
-    width: 1780px;
+    color: rgba(0, 0, 0, 0.87);
+    background: white;
   }
 
   .header-list {
-  // width: 1000px;
-  // max-width: 100%;
-  width: 1780px;
-  border: solid 1px #ccc;
-  min-height: 60px;
-  display: flex;
-  flex-direction: row;
-  background: white;
-  border-radius: 4px;
-  overflow: hidden;
+    color: rgba(0, 0, 0, 0.87);
+    background: white;
+  }
+}
+
+:host-context(.dark) {
+
+  .scrollable-viewport {
+    color: rgb(255, 255, 255);
+    background: rgb(75,75,75);
   }
 
-  .header-box {
-  padding: 20px 10px;
-  border-right: solid 1px #ccc;
-  color: rgba(0, 0, 0, 0.87);
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  box-sizing: border-box;
-  cursor: move;
-  background: white;
-  font-size: 14px;
-  flex-grow: 1;
-  flex-basis: 0;
+  .header-list{
+    color: rgb(255, 255, 255);
+    background: rgb(75,75,75);
   }
-
-  .row {
-  display: flex;
-  height: 60px;
-  // border: solid 1px #ccc;
-  flex-direction: row;
-  background: white;
-  border-radius: 4px;
-  overflow: hidden;
-  }
-
-  .checkbox {
-  justify-content: center !important;
-  }
-
-  .cell {
-  flex: 1;
-  background: white;
-  box-sizing: border-box;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  display: flex;
-  // padding: 20px 10px;
-  // border-right: solid 1px #ccc;
-  // color: rgba(0, 0, 0, 0.87);
-  // border-width: 1px;
-  // border-style: ;
-  // border-color: ;
-  // border-image: ;
-  }
-
-  .cdk-drag-preview {
-  box-sizing: border-box;
-  border-radius: 4px;
-  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
-              0 8px 10px 1px rgba(0, 0, 0, 0.14),
-              0 3px 14px 2px rgba(0, 0, 0, 0.12);
-  }
-
-  .cdk-drag-placeholder {
-    opacity: 0;
-  }
-
-  .cdk-drag-animating {
-    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-  }
-
-  .header-box:last-child {
-    border: none;
-  }
-
-  .header-list.cdk-drop-list-dragging .header-box:not(.cdk-drag-placeholder) {
-    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-  }
-// }
+}
