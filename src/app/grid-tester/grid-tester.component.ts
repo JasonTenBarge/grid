@@ -23,13 +23,12 @@ export class GridTesterComponent implements OnInit {
     {name: 'checkbox', title: 'Checkbox', type: 'checkbox'}
   ];
   settingsForm = this.fb.group({
-    class: ['material']
+    template: ['material']
   });
 
   constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
-    const test = this.settingsForm.get('class').value;
   }
 
 }

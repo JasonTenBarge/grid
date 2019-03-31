@@ -2,9 +2,10 @@
 <form [formGroup]="settingsForm">
   <p>
     Theme: 
-    <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="class">
+    <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="template">
       <mat-button-toggle value="light">Light</mat-button-toggle>
       <mat-button-toggle value="dark">Dark</mat-button-toggle>
+      <mat-button-toggle value="compact">Compact</mat-button-toggle>
     </mat-button-toggle-group>
   </p>
 </form>
@@ -13,5 +14,5 @@
 <app-grid
  [data]="data"
  [columns]="columns"
- [class]="settingsForm.get('class')?.value"
+ [template]="settingsForm.get('template')?.value"
  ></app-grid>

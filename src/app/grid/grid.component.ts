@@ -25,7 +25,17 @@ export class GridComponent implements OnInit {
   sortList: Sort[] = [];
   groupList: any[] = [];
   groupForm = this.fb.array([]);
-
+  itemSize = 80;
+  _template: string;
+  @Input() set
+  template(input: string) {
+    this._template = input;
+    if (this._template === 'compact') {
+      this.itemSize = 60;
+    } else {
+      this.itemSize = 80;
+    }
+  }
   constructor(private fb: FormBuilder) {
     this.searchForm.valueChanges.pipe(
       debounceTime(100)
