@@ -26,7 +26,7 @@ border: solid 1px #ccc;
 min-height: 60px;
 display: flex;
 flex-direction: row;
-// background: white;
+background: white;
 border-radius: 4px;
 overflow: hidden;
 }
@@ -34,14 +34,14 @@ overflow: hidden;
 .header-box {
 padding: 20px 10px;
 border-right: solid 1px #ccc;
-// color: rgba(0, 0, 0, 0.87);
+color: rgba(0, 0, 0, 0.87);
 display: flex;
 flex-direction: row;
 align-items: center;
 justify-content: space-between;
 box-sizing: border-box;
 cursor: move;
-// background: white;
+background: white;
 font-size: 14px;
 flex-grow: 1;
 flex-basis: 0;
@@ -103,15 +103,8 @@ box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
 }
 
 :host-context(.light) {
-  color: rgba(0, 0, 0, 0.87);
-  background: white;
 
   .scrollable-viewport {
-    color: rgba(0, 0, 0, 0.87);
-    background: white;
-  }
-
-  .header-list {
     color: rgba(0, 0, 0, 0.87);
     background: white;
   }
@@ -120,11 +113,6 @@ box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
 :host-context(.dark) {
 
   .scrollable-viewport {
-    color: rgb(255, 255, 255);
-    background: rgb(75,75,75);
-  }
-
-  .header-list{
     color: rgb(255, 255, 255);
     background: rgb(75,75,75);
   }
