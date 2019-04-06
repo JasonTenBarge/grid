@@ -1,86 +1,97 @@
-<div [class]="_template">
-  <div class="flex-cointainer">
-    <mat-slide-toggle (change)="changeEdit($event)" class="flex">
-      Edit
-    </mat-slide-toggle>
-    <div class="flex">
-      Rows: {{displayForm.controls?.length}}
+<div [class]="_template" [style.height]="height">
+  <div class="component-container">
+    <div class="flex-container">
+      <mat-slide-toggle (change)="changeEdit($event)" class="flex">
+        Edit
+      </mat-slide-toggle>
+      <div class="flex">
+        Rows: {{displayForm.controls?.length}}
+      </div>
+      <div class="flex">
+        Number of Columns: {{columns?.length}}
+      </div>
     </div>
-    <div class="flex">
-      Number of Columns: {{columns?.length}}
+    <div class="flex-container">
+      <mat-form-field class="header" appearance="standard">
+        <input matInput type="text" matInput placeholder="Search" [formControl]="searchForm">
+      </mat-form-field>
     </div>
-  </div>
-  <mat-form-field class="header" appearance="standard">
-    <input matInput type="text" matInput placeholder="Search" [formControl]="searchForm">
-  </mat-form-field>
-  <div cdkDropList cdkDropListOrientation="horizontal" class="flex-cointainer header-list" (cdkDropListDropped)="drop($event)">
-    <div *ngFor="let group of groupList" class="header-box"></div>
-    <div *ngFor="let column of columns" class="header-box" cdkDrag>
-      {{column.title}}
-      <mat-icon *ngIf="column.sort==='asc'">arrow_upward</mat-icon>
-      <mat-icon *ngIf="column.sort==='desc'">arrow_downward</mat-icon>
-      <button mat-icon-button [matMenuTriggerFor]="columnMenu" [matMenuTriggerData]="column"> <mat-icon>more_vert</mat-icon> </button>
+    <div cdkDropList cdkDropListOrientation="horizontal" class="header-list" (cdkDropListDropped)="drop($event)">
+      <div *ngFor="let group of groupList" class="header-box"></div>
+      <div *ngFor="let column of columns" class="header-box" cdkDrag>
+        {{column.title}}
+        <mat-icon *ngIf="column.sort==='asc'">arrow_upward</mat-icon>
+        <mat-icon *ngIf="column.sort==='desc'">arrow_downward</mat-icon>
+        <button mat-icon-button [matMenuTriggerFor]="columnMenu" [matMenuTriggerData]="column"> <mat-icon>more_vert</mat-icon> </button>
+      </div>
     </div>
-  </div>
-  <form class="flex-container" [formGroup]="displayForm">
-    <cdk-virtual-scroll-viewport [itemSize]="itemSize" class="scrollable-viewport" minBufferPx="36" maxBufferPx="72" (scrolledIndexChange)="scroll($event)" (elementScroll)="scroll($event)">
-      <ng-container *cdkVirtualFor="let row of displayForm.controls; let i=index; trackByIdx">
-        <ng-container *ngIf="row.get('group').value === false">
+    <form class="grid-container" [formGroup]="displayForm">
+      <cdk-virtual-scroll-viewport *ngIf="stick" [itemSize]="itemSize" class="sticky-column-viewport" minBufferPx="36" maxBufferPx="72" #stickyColumn>
+        <ng-container *cdkVirtualFor="let row of displayForm.controls; let i=index; trackByIdx">
           <div class="row" *ngIf="!edit">
-            <div *ngFor="let group of groupList" class="cell"></div>
-            <div *ngFor="let column of columns" class="cell">{{row.get('data').get(column.name)?.value}}</div>
-          </div>
-          <div class="row" *ngIf="edit" [formGroup]="row">
-            <ng-container [formGroup]="row.get('data')">
-              <div *ngFor="let group of groupList" class="cell"></div>
-              <div *ngFor="let column of columns" class="cell">
-                <ng-container [ngSwitch]="column.type">
-                  <mat-form-field *ngSwitchCase="'number'" appearance="standard">
-                    <input matInput type="number" [placeholder]="column.name" [formControlName]="column.name">
-                    <mat-hint>{{column.hint}}</mat-hint>
-                  </mat-form-field>
-                  <mat-form-field *ngSwitchCase="'text'" appearance="standard">
-                    <input matInput type="text" [placeholder]="column.name" [formControlName]="column.name">
-                    <mat-hint>{{column.hint}}</mat-hint>
-                  </mat-form-field>
-                  <mat-checkbox *ngSwitchCase="'checkbox'" class="checkbox" type="checkbox" [formControlName]="column.name"></mat-checkbox>
-                  <mat-form-field *ngSwitchCase="'select'" appearance="standard">
-                    <mat-select [formControlName]="column.name">
-                      <mat-option *ngFor="let option of column.options" [value]="option">
-                        {{option}}
-                      </mat-option>
-                    </mat-select>
-                    <mat-hint>{{column.hint}}</mat-hint>
-                  </mat-form-field>
-                  <mat-form-field *ngSwitchDefault appearance="standard">
-                    <input matInput type="text" [placeholder]="column.name" [formControlName]="column.name">
-                    <mat-hint>{{column.hint}}</mat-hint>
-                  </mat-form-field>
-                </ng-container>
-              </div>
-            </ng-container>
+            <div class="cell">{{row.get('data').get(columns[0].name)?.value}}</div>
           </div>
         </ng-container>
-        <div class="row" *ngIf="row.get('group').value === true">
-          <div *ngFor="let group of groupList; let c=index" class="cell">
-            <button mat-icon-button (click)="openGroup(group,columns[c],row)" *ngIf="row.get('opened').value === false && row.get('level').value === c">
-              <mat-icon>chevron_right</mat-icon>
-              <span>{{row.get('data').get(columns[c].name)?.value}}</span>
-            </button>
-            <button mat-icon-button (click)="closeGroup(group,columns[c],row)" *ngIf="row.get('opened').value === true && row.get('level').value === c">
-                <mat-icon>expand_more</mat-icon>
+      </cdk-virtual-scroll-viewport>
+      <cdk-virtual-scroll-viewport [itemSize]="itemSize" class="scrollable-viewport" minBufferPx="36" maxBufferPx="72" (scrolledIndexChange)="scroll($event)" #grid>
+        <ng-container *cdkVirtualFor="let row of displayForm.controls; let i=index; trackByIdx">
+          <ng-container *ngIf="row.get('group').value === false">
+            <div class="row" *ngIf="!edit">
+              <div *ngFor="let group of groupList" class="cell"></div>
+              <div *ngFor="let column of columns" class="cell">{{row.get('data').get(column.name)?.value}}</div>
+            </div>
+            <div class="row" *ngIf="edit" [formGroup]="row">
+              <ng-container [formGroup]="row.get('data')">
+                <div *ngFor="let group of groupList" class="cell"></div>
+                <div *ngFor="let column of columns" class="cell">
+                  <ng-container [ngSwitch]="column.type">
+                    <mat-form-field *ngSwitchCase="'number'" appearance="standard">
+                      <input matInput type="number" [placeholder]="column.name" [formControlName]="column.name">
+                      <mat-hint>{{column.hint}}</mat-hint>
+                    </mat-form-field>
+                    <mat-form-field *ngSwitchCase="'text'" appearance="standard">
+                      <input matInput type="text" [placeholder]="column.name" [formControlName]="column.name">
+                      <mat-hint>{{column.hint}}</mat-hint>
+                    </mat-form-field>
+                    <mat-checkbox *ngSwitchCase="'checkbox'" class="checkbox" type="checkbox" [formControlName]="column.name"></mat-checkbox>
+                    <mat-form-field *ngSwitchCase="'select'" appearance="standard">
+                      <mat-select [formControlName]="column.name">
+                        <mat-option *ngFor="let option of column.options" [value]="option">
+                          {{option}}
+                        </mat-option>
+                      </mat-select>
+                      <mat-hint>{{column.hint}}</mat-hint>
+                    </mat-form-field>
+                    <mat-form-field *ngSwitchDefault appearance="standard">
+                      <input matInput type="text" [placeholder]="column.name" [formControlName]="column.name">
+                      <mat-hint>{{column.hint}}</mat-hint>
+                    </mat-form-field>
+                  </ng-container>
+                </div>
+              </ng-container>
+            </div>
+          </ng-container>
+          <div class="row" *ngIf="row.get('group').value === true">
+            <div *ngFor="let group of groupList; let c=index" class="cell">
+              <button mat-icon-button (click)="openGroup(group,columns[c],row)" *ngIf="row.get('opened').value === false && row.get('level').value === c">
+                <mat-icon>chevron_right</mat-icon>
                 <span>{{row.get('data').get(columns[c].name)?.value}}</span>
-            </button>
+              </button>
+              <button mat-icon-button (click)="closeGroup(group,columns[c],row)" *ngIf="row.get('opened').value === true && row.get('level').value === c">
+                  <mat-icon>expand_more</mat-icon>
+                  <span>{{row.get('data').get(columns[c].name)?.value}}</span>
+              </button>
+            </div>
+            <div *ngFor="let column of columns; let c=index" class="cell">
+              <!-- <ng-container *ngIf="c == row.get('level').value">
+                {{row.get('data').get(column.name)?.value}}
+              </ng-container> -->
+            </div>
           </div>
-          <div *ngFor="let column of columns; let c=index" class="cell">
-            <!-- <ng-container *ngIf="c == row.get('level').value">
-              {{row.get('data').get(column.name)?.value}}
-            </ng-container> -->
-          </div>
-        </div>
-      </ng-container>
-    </cdk-virtual-scroll-viewport>
-  </form>
+        </ng-container>
+      </cdk-virtual-scroll-viewport>
+    </form>
+  </div>
 
   <mat-menu #columnMenu="matMenu">
     <ng-template matMenuContent let-name="name">

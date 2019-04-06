@@ -14,13 +14,18 @@ import { CdkVirtualScrollViewport, CdkScrollable, ExtendedScrollToOptions } from
 
 export class GridComponent implements OnInit {
 
-  @ViewChild(CdkVirtualScrollViewport)
+  @ViewChild('grid')
   viewport: CdkVirtualScrollViewport;
+
+  @ViewChild('stickyColumn')
+  stickyColumn: CdkVirtualScrollViewport;
 
   @ViewChild('header')
   header: CdkScrollable;
 
   dataForm: FormArray;
+  sticky = false;
+  @Input() height: string;
   @Input() columns: GridColumn[];
   @Input()
   set data(input: any[]) {
@@ -34,8 +39,8 @@ export class GridComponent implements OnInit {
   groupForm = this.fb.array([]);
   itemSize = 80;
   _template: string;
-  @Input() set
-  template(input: string) {
+  @Input()
+  set template(input: string) {
     this._template = input;
     switch (input) {
       case 'compact': {
@@ -43,6 +48,10 @@ export class GridComponent implements OnInit {
         break;
       }
       case 'inventory': {
+        this.itemSize = 36;
+        break;
+      }
+      case 'inventory-box': {
         this.itemSize = 36;
         break;
       }
@@ -61,11 +70,11 @@ export class GridComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.viewport.elementScrolled().subscribe(x => {
-      console.log(this.viewport);
-      console.log(this.header);
-      this.header.scrollTo({right: this.viewport.measureScrollOffset('left')});
-    });
+    // this.viewport.elementScrolled().subscribe(x => {
+    //   console.log(this.viewport);
+    //   console.log(this.header);
+    //   this.header.scrollTo({right: this.viewport.measureScrollOffset('left')});
+    // });
   }
 
   populateForms(input: any[]) {
@@ -272,8 +281,9 @@ export class GridComponent implements OnInit {
   }
 
   scroll(e: any) {
-    console.log(e);
-    console.log('offset', this.viewport.measureScrollOffset('left'));
+    if (this.stickyColumn) {
+      this.stickyColumn.scrollTo({top: this.viewport.measureScrollOffset('top')});
+    }
   }
 
   openFilter(columnName: string) {

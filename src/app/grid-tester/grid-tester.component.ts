@@ -8,7 +8,7 @@ import { FormBuilder, FormControl } from '@angular/forms';
 })
 export class GridTesterComponent implements OnInit {
 
-  rows = 5000;
+  rows = 10000;
   data = generateTestData(this.rows);
   columns = [
     {name: 'id', title: 'ID', type: 'number'},
@@ -23,7 +23,7 @@ export class GridTesterComponent implements OnInit {
     {name: 'checkbox', title: 'Checkbox', type: 'checkbox'}
   ];
   settingsForm = this.fb.group({
-    template: ['material']
+    template: ['inventory']
   });
 
   constructor(private fb: FormBuilder) { }
@@ -33,7 +33,7 @@ export class GridTesterComponent implements OnInit {
 
 }
 
-export function generateTestData(rows: number = 5000) {
+export function generateTestData(rows: number = 10000) {
 
   const usernames = [
     'test',

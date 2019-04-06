@@ -1,5 +1,7 @@
-.flex-cointainer {
+.flex-container {
   display: flex;
+  flex: 1;
+  flex-grow: 0;
   // height: 80px;
 }
 
@@ -7,29 +9,62 @@
   flex: 1;
 }
 
+cdk-virtual-scroll-viewport {
+  flex: 1;
+}
+
+.grid-container {
+  display: flex;
+  flex: 1;
+  flex-grow: 1;
+  height: 100%;
+}
+
 .scrollable-viewport {
-  height: 600px;
-  width: 1800px;
+  height: 100%;
+  // width: 1600px;
   // flex: 1;
   // border: 1px solid black;
   border: 0;
+  flex: 1;
+  flex-grow: 9;
+}
+
+.sticky-column-viewport {
+  height: 600px;
+  // width: 200px;
+  // flex: 1;
+  // border: 1px solid black;
+  border: 0;
+  overflow-y: hidden;
+  flex: 1;
+  flex-grow: 1;
+}
+
+.component-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .header {
-  width: 1780px;
+  width: 100%;
 }
 
 .header-list {
 // width: 1000px;
 // max-width: 100%;
-width: 1780px;
-border: solid 1px #ccc;
-height: 80px;
-display: flex;
-flex-direction: row;
-background: white;
-border-radius: 4px;
-overflow: hidden;
+// width: 1780px;
+  flex: 1;
+  margin-right: 18px;
+  border: solid 1px #ccc;
+  display: flex;
+  flex-direction: row;
+  background: white;
+  border-radius: 4px;
+  overflow: hidden;
+  flex-basis: 36px;
+  flex-grow: 0;
 }
 
 .header-box {
@@ -44,8 +79,6 @@ box-sizing: border-box;
 cursor: move;
 background: white;
 // font-size: 14px;
-flex-grow: 1;
-flex-basis: 0;
 flex: 1;
 }
 
@@ -55,7 +88,6 @@ height: 80px;
 // border: solid 1px #ccc;
 flex-direction: row;
 // background: white;
-border-radius: 4px;
 overflow: hidden;
 }
 
@@ -139,6 +171,7 @@ box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
 
 .inventory {
   font-size: 14px;
+  height: 100%;
 
   .flex-cointainer {
     height: 36px;
@@ -151,4 +184,28 @@ box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
   .row {
     height: 36px;
   }
+
+}
+
+.inventory-box {
+  font-size: 14px;
+
+  .flex-cointainer {
+    height: 36px;
+  }
+
+  .header-list {
+    height: 36px;
+  }
+
+  .row {
+    height: 36px;
+    border-radius: 4px;
+    border: solid 1px #ccc;
+  }
+
+  .cell {
+    border-right: solid 1px #ccc;
+  }
+
 }
