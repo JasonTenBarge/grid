@@ -33,7 +33,7 @@
           </div>
         </ng-container>
       </cdk-virtual-scroll-viewport>
-      <cdk-virtual-scroll-viewport [itemSize]="itemSize" class="scrollable-viewport" minBufferPx="36" maxBufferPx="72" (scrolledIndexChange)="scroll($event)" #grid>
+      <cdk-virtual-scroll-viewport [itemSize]="itemSize" class="scrollable-viewport" minBufferPx="36" maxBufferPx="72" #grid>
         <ng-container *cdkVirtualFor="let row of displayForm.controls; let i=index; trackByIdx">
           <ng-container *ngIf="row.get('group').value === false">
             <div class="row" *ngIf="!edit">
@@ -94,10 +94,10 @@
   </div>
 
   <mat-menu #columnMenu="matMenu">
-    <ng-template matMenuContent let-name="name">
+    <ng-template matMenuContent let-name="name" let-title="title">
       <button mat-menu-item (click)="sortClick(name)">Sort</button>
       <button mat-menu-item (click)="addGroup(name)">Group</button>
-      <button mat-menu-item (click)="openFilter(name)">Filter</button>
+      <button mat-menu-item (click)="openFilter(name, title)">Filter</button>
     </ng-template>
   </mat-menu>
 </div>

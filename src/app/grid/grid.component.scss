@@ -31,7 +31,7 @@ cdk-virtual-scroll-viewport {
 }
 
 .sticky-column-viewport {
-  height: 600px;
+  height: 100%;
   // width: 200px;
   // flex: 1;
   // border: 1px solid black;
@@ -39,6 +39,7 @@ cdk-virtual-scroll-viewport {
   overflow-y: hidden;
   flex: 1;
   flex-grow: 1;
+  overflow-anchor: none;
 }
 
 .component-container {
@@ -68,7 +69,7 @@ cdk-virtual-scroll-viewport {
 }
 
 .header-box {
-padding: 0px 10px;
+padding: 0px 0px 0px 10px;
 border-right: solid 1px #ccc;
 color: rgba(0, 0, 0, 0.87);
 display: flex;

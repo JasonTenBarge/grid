@@ -1,0 +1,19 @@
+<h1 mat-dialog-title>{{filterForm.get('columnTitle').value}} Filter</h1>
+<div mat-dialog-content>
+    <form class="grid-container" [formGroup]="filterForm">
+        <mat-form-field appearance="standard" class="form-field">
+            <mat-select formControlName="filter">
+                <mat-option *ngFor="let filter of filters" [value]="filter">
+                    {{filter}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="standard" class="form-field">
+            <input matInput type="text" formControlName="value">
+        </mat-form-field>
+    </form>
+</div>
+<div mat-dialog-actions class="flex-container">
+  <button mat-button class="flex" (click)="onNoClick()">Cancel</button>
+  <button mat-raised-button color="primary" class="flex" [mat-dialog-close]="filterForm.value" cdkFocusInitial>Filter</button>
+</div>

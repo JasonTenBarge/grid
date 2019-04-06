@@ -21,6 +21,8 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatSelectModule} from '@angular/material/select';
 import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatDialogModule} from '@angular/material/dialog';
+import {GridFilterDialogComponent} from './grid/grid-filter-dialog.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,8 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
     GridComponent,
     FilterPipe,
     SortPipe,
-    GridTesterComponent
+    GridTesterComponent,
+    GridFilterDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -47,8 +50,10 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
     MatButtonModule,
     MatMenuModule,
     MatSelectModule,
-    MatDatepickerModule
+    MatDatepickerModule,
+    MatDialogModule
   ],
+  entryComponents: [GridFilterDialogComponent],
   providers: [],
   bootstrap: [AppComponent]
 })

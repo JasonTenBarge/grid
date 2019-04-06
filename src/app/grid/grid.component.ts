@@ -1,10 +1,12 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormArray } from '@angular/forms';
-import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
-import {filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { debounceTime } from 'rxjs/operators';
 import { GridColumn } from './grid-column';
 import { Sort } from './sort';
-import { CdkVirtualScrollViewport, CdkScrollable, ExtendedScrollToOptions } from '@angular/cdk/scrolling';
+import { CdkVirtualScrollViewport, CdkScrollable } from '@angular/cdk/scrolling';
+import { MatDialog } from '@angular/material/dialog';
+import { GridFilterDialogComponent } from './grid-filter-dialog.component';
 
 @Component({
   selector: 'app-grid',
@@ -24,7 +26,7 @@ export class GridComponent implements OnInit {
   header: CdkScrollable;
 
   dataForm: FormArray;
-  sticky = false;
+  stick = false;
   @Input() height: string;
   @Input() columns: GridColumn[];
   @Input()
@@ -61,7 +63,7 @@ export class GridComponent implements OnInit {
       }
     }
   }
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, public dialog: MatDialog) {
     this.searchForm.valueChanges.pipe(
       debounceTime(100)
     ).subscribe(text => {
@@ -70,11 +72,14 @@ export class GridComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.viewport.elementScrolled().subscribe(x => {
-    //   console.log(this.viewport);
-    //   console.log(this.header);
-    //   this.header.scrollTo({right: this.viewport.measureScrollOffset('left')});
-    // });
+    this.viewport.elementScrolled().subscribe(x => {
+      // console.log(this.viewport);
+      // console.log(this.header);
+      // this.header.scrollTo({right: this.viewport.measureScrollOffset('left')});
+      if (this.stickyColumn) {
+        this.stickyColumn.scrollTo({top: this.viewport.measureScrollOffset('top')});
+      }
+    });
   }
 
   populateForms(input: any[]) {
@@ -280,12 +285,15 @@ export class GridComponent implements OnInit {
     return i;
   }
 
-  scroll(e: any) {
-    if (this.stickyColumn) {
-      this.stickyColumn.scrollTo({top: this.viewport.measureScrollOffset('top')});
-    }
-  }
+  openFilter(columnName: string, columnTitle: string) {
+    const dialogRef = this.dialog.open(GridFilterDialogComponent, {
+      height: '310px',
+      width: '300px',
+      data: {columnName: columnName, columnTitle: columnTitle}
+    });
 
-  openFilter(columnName: string) {
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+    });
   }
 }
