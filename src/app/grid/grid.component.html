@@ -14,17 +14,17 @@
     <input matInput type="text" matInput placeholder="Search" [formControl]="searchForm">
   </mat-form-field>
   <div cdkDropList cdkDropListOrientation="horizontal" class="flex-cointainer header-list" (cdkDropListDropped)="drop($event)">
-    <div *ngFor="let group of groupList" class="flex header-box"></div>
-    <div *ngFor="let column of columns" class="flex header-box" cdkDrag>
+    <div *ngFor="let group of groupList" class="header-box"></div>
+    <div *ngFor="let column of columns" class="header-box" cdkDrag>
       {{column.title}}
       <mat-icon *ngIf="column.sort==='asc'">arrow_upward</mat-icon>
       <mat-icon *ngIf="column.sort==='desc'">arrow_downward</mat-icon>
       <button mat-icon-button [matMenuTriggerFor]="columnMenu" [matMenuTriggerData]="column"> <mat-icon>more_vert</mat-icon> </button>
     </div>
   </div>
-  <form [formGroup]="displayForm">
-    <cdk-virtual-scroll-viewport [itemSize]="itemSize" class="scrollable-viewport">
-      <ng-container *cdkVirtualFor="let row of displayForm.controls; let i=index;">
+  <form class="flex-container" [formGroup]="displayForm">
+    <cdk-virtual-scroll-viewport [itemSize]="itemSize" class="scrollable-viewport" minBufferPx="36" maxBufferPx="72" (scrolledIndexChange)="scroll($event)" (elementScroll)="scroll($event)">
+      <ng-container *cdkVirtualFor="let row of displayForm.controls; let i=index; trackByIdx">
         <ng-container *ngIf="row.get('group').value === false">
           <div class="row" *ngIf="!edit">
             <div *ngFor="let group of groupList" class="cell"></div>
@@ -86,6 +86,7 @@
     <ng-template matMenuContent let-name="name">
       <button mat-menu-item (click)="sortClick(name)">Sort</button>
       <button mat-menu-item (click)="addGroup(name)">Group</button>
+      <button mat-menu-item (click)="openFilter(name)">Filter</button>
     </ng-template>
   </mat-menu>
 </div>

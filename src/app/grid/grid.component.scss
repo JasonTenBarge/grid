@@ -1,6 +1,6 @@
 .flex-cointainer {
   display: flex;
-  height: 80px;
+  // height: 80px;
 }
 
 .flex {
@@ -10,6 +10,7 @@
 .scrollable-viewport {
   height: 600px;
   width: 1800px;
+  // flex: 1;
   // border: 1px solid black;
   border: 0;
 }
@@ -32,7 +33,7 @@ overflow: hidden;
 }
 
 .header-box {
-padding: 20px 10px;
+padding: 0px 10px;
 border-right: solid 1px #ccc;
 color: rgba(0, 0, 0, 0.87);
 display: flex;
@@ -45,6 +46,7 @@ background: white;
 // font-size: 14px;
 flex-grow: 1;
 flex-basis: 0;
+flex: 1;
 }
 
 .row {
@@ -63,6 +65,7 @@ justify-content: center !important;
 
 .cell {
 flex: 1;
+// width: 300px;
 // background: white;
 box-sizing: border-box;
 flex-direction: row;
@@ -131,5 +134,21 @@ box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
 
   .row {
     height: 60px;
+  }
+}
+
+.inventory {
+  font-size: 14px;
+
+  .flex-cointainer {
+    height: 36px;
+  }
+
+  .header-list {
+    height: 36px;
+  }
+
+  .row {
+    height: 36px;
   }
 }

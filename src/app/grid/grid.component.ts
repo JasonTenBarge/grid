@@ -1,9 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormArray } from '@angular/forms';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 import {filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { GridColumn } from './grid-column';
 import { Sort } from './sort';
+import { CdkVirtualScrollViewport, CdkScrollable, ExtendedScrollToOptions } from '@angular/cdk/scrolling';
 
 @Component({
   selector: 'app-grid',
@@ -12,6 +13,12 @@ import { Sort } from './sort';
 })
 
 export class GridComponent implements OnInit {
+
+  @ViewChild(CdkVirtualScrollViewport)
+  viewport: CdkVirtualScrollViewport;
+
+  @ViewChild('header')
+  header: CdkScrollable;
 
   dataForm: FormArray;
   @Input() columns: GridColumn[];
@@ -30,10 +37,19 @@ export class GridComponent implements OnInit {
   @Input() set
   template(input: string) {
     this._template = input;
-    if (this._template === 'compact') {
-      this.itemSize = 60;
-    } else {
-      this.itemSize = 80;
+    switch (input) {
+      case 'compact': {
+        this.itemSize = 60;
+        break;
+      }
+      case 'inventory': {
+        this.itemSize = 36;
+        break;
+      }
+      default: {
+        this.itemSize = 80;
+        break;
+      }
     }
   }
   constructor(private fb: FormBuilder) {
@@ -45,6 +61,11 @@ export class GridComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.viewport.elementScrolled().subscribe(x => {
+      console.log(this.viewport);
+      console.log(this.header);
+      this.header.scrollTo({right: this.viewport.measureScrollOffset('left')});
+    });
   }
 
   populateForms(input: any[]) {
@@ -244,5 +265,17 @@ export class GridComponent implements OnInit {
       this.displayForm.controls = this.displayForm.controls.filter(y => x !== y);
     });
     row.get('opened').setValue(false);
+  }
+
+  trackByIdx(i) {
+    return i;
+  }
+
+  scroll(e: any) {
+    console.log(e);
+    console.log('offset', this.viewport.measureScrollOffset('left'));
+  }
+
+  openFilter(columnName: string) {
   }
 }
