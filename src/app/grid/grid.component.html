@@ -32,7 +32,7 @@
       </div>
     </div>
     <div class="grid-container">
-      <cdk-virtual-scroll-viewport *ngIf="stick" [itemSize]="itemSize" class="sticky-column-viewport" minBufferPx="36" maxBufferPx="72" #stickyColumn>
+      <cdk-virtual-scroll-viewport *ngIf="stick" [itemSize]="itemSize" class="sticky-column-viewport" #stickyColumn>
         <ng-container *cdkVirtualFor="let row of displayForm; let i=index; trackByIdx">
           <div class="row" *ngIf="!edit">
             <div class="cell">{{row.data.get(columns[0].name)?.value}}</div>
