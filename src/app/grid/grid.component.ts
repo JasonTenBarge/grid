@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormArray } from '@angular/forms';
+import { FormBuilder, FormControl } from '@angular/forms';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { debounceTime } from 'rxjs/operators';
 import { GridColumn } from './grid-column';
@@ -7,6 +7,7 @@ import { Sort } from './sort';
 import { CdkVirtualScrollViewport, CdkScrollable } from '@angular/cdk/scrolling';
 import { MatDialog } from '@angular/material/dialog';
 import { GridFilterDialogComponent } from './grid-filter-dialog.component';
+import { GridRow } from './grid-row';
 
 @Component({
   selector: 'app-grid',
@@ -25,7 +26,7 @@ export class GridComponent implements OnInit {
   @ViewChild('header')
   header: CdkScrollable;
 
-  dataForm: FormArray;
+  dataForm: GridRow[] = [];
   stick = false;
   @Input() height: string;
   @Input() columns: GridColumn[];
@@ -35,10 +36,10 @@ export class GridComponent implements OnInit {
   }
   edit = false;
   searchForm = new FormControl('');
-  displayForm = this.fb.array([]);
+  displayForm: GridRow[] = [];
   sortList: Sort[] = [];
   groupList: any[] = [];
-  groupForm = this.fb.array([]);
+  groupForm: GridRow[] = [];
   itemSize = 80;
   _template: string;
   @Input()
@@ -83,14 +84,13 @@ export class GridComponent implements OnInit {
   }
 
   populateForms(input: any[]) {
-    this.dataForm = this.fb.array([]);
+    this.dataForm = [];
     input.forEach(row => {
-      this.dataForm.push(
-        this.fb.group({
-          data: this.fb.group(row),
-          group: false,
-        })
-      );
+      this.dataForm.push({
+        data: this.fb.group(row),
+        group: false,
+        opened: false,
+      });
     });
     this.displayData();
   }
@@ -104,19 +104,19 @@ export class GridComponent implements OnInit {
   }
 
   displayData() {
-    this.displayForm.controls = this.dataForm.controls.filter(x => x.get('group').value === false);
+    this.displayForm = this.dataForm.filter(x => x.group === false);
     this.filterData();
     this.sortData();
     this.groupData();
-    this.displayForm.controls = this.displayForm.controls.slice(); // slice needed to let angular know array changed
+    this.displayForm = this.displayForm.slice(); // slice needed to let angular know array changed
   }
 
   filterData() {
-    if (!this.displayForm.controls || !this.searchForm.value) {
+    if (!this.displayForm || !this.searchForm.value) {
       return null;
     }
-    this.displayForm.controls = this.displayForm.controls.filter(row =>
-      Object.values(row.get('data').value)
+    this.displayForm = this.displayForm.filter(row =>
+      Object.values(row.data.value)
       .map(value => String(value)
       .indexOf(this.searchForm.value) >= 0)
       .filter(x => x === true)
@@ -127,11 +127,11 @@ export class GridComponent implements OnInit {
     if (this.sortList.length === 0) {
       return null;
     }
-    this.displayForm.controls = this.displayForm.controls.sort((row1, row2) => {
+    this.displayForm = this.displayForm.sort((row1, row2) => {
       for (const sorter of this.sortList) {
-        if (row1.get('data').get(sorter.name).value > row2.get('data').get(sorter.name).value) {
+        if (row1.data.get(sorter.name).value > row2.data.get(sorter.name).value) {
           return sorter.direction === 'asc' ? 1 : -1;
-        } else if (row1.get('data').get(sorter.name).value < row2.get('data').get(sorter.name).value) {
+        } else if (row1.data.get(sorter.name).value < row2.data.get(sorter.name).value) {
           return sorter.direction === 'asc' ? -1 : 1;
         }
       }
@@ -209,76 +209,93 @@ export class GridComponent implements OnInit {
     for (const group of this.groupList) {
       let oldValue: string = null;
       let index = 0;
-      for (const row of this.displayForm.controls) {
-        if (row.get('data').get(group).value !== oldValue && row.get('group').value === false) {
-          oldValue = row.get('data').get(group).value;
-          const groupValue = row.get('data').value;
-          const groupRow = this.fb.group({
+      for (const row of this.displayForm) {
+        if (row.data.get(group).value !== oldValue && row.group === false) {
+          oldValue = row.data.get(group).value;
+          const groupValue = row.data.value;
+          const groupRow: GridRow = {
             data: this.fb.group(groupValue),
             group: true,
             opened: true,
             level: groupIndex,
-            children: this.fb.array([])
-          });
-          const foundGroup = this.groupForm.controls.find(x => x.get('data').value === groupRow.get('data').value);
+            children: []
+          };
+          const foundGroup = this.groupForm.find(x => x.data.value === groupRow.data.value);
           if (foundGroup) {
-            this.displayForm.controls.splice(index, 0, foundGroup);
+            this.displayForm.splice(index, 0, foundGroup);
           } else {
-            this.displayForm.controls.splice(index, 0, groupRow);
-            this.groupForm.controls.push(groupRow);
+            this.displayForm.splice(index, 0, groupRow);
+            this.groupForm.push(groupRow);
           }
         }
         index++;
       }
       groupIndex++;
     }
-    // groupIndex = 0;
-    // for (const group of this.groupList) {
-    //   for (const row of this.displayForm.controls) {
-    //     if (row.get('group').value === true) {
-    //       const children = this.displayForm.controls.filter(x => {
-    //         for (let i = 0 ; i <= groupIndex; i++) {
-    //           if (x.get('data').get(this.columns[i].name).value !== row.get('data').get(this.columns[i].name).value ||
-    //             (x.get('group').value === true && x.get('level').value <= groupIndex))  {
-    //             return false;
-    //           }
-    //         }
-    //         return true;
-    //       });
-    //       (row.get('children') as FormArray).controls = children;
-    //     }
-    //   }
-    //   groupIndex++;
-    // }
+    groupIndex = 0;
+    for (const group of this.groupList) {
+      let oldGroup: GridRow = null;
+      let oldGroupIndex = 0;
+      let index = 0;
+      for (const row of this.displayForm) {
+        if (row.group === true && row.level === groupIndex) {
+          // const children = this.displayForm.filter(x => {
+          //   for (let i = 0 ; i <= groupIndex; i++) {
+          //     if (x.data.get(this.columns[i].name).value !== row.data.get(this.columns[i].name).value ||
+          //       (x.group === true && x.level <= groupIndex))  {
+          //       return false;
+          //     }
+          //   }
+          //   return true;
+          // });
+          // row.children = children;
+          if (oldGroup) {
+            oldGroup.children = this.displayForm
+              .slice(oldGroupIndex + 1, index)
+              .filter(x => !(x.group === true && x.level < groupIndex));
+          }
+          oldGroup = row;
+          oldGroupIndex = index;
+        }
+        index++;
+      }
+      if (oldGroup) {
+        oldGroup.children = this.displayForm
+        .slice(oldGroupIndex + 1, index)
+        .filter(x => !(x.group === true && x.level < groupIndex));
+      }
+      groupIndex++;
+    }
   }
 
   openGroup(group: any, column: any, row: any) {
-    let index = this.displayForm.controls.indexOf(row);
-    for (const control of row.get('children').controls) {
+    let index = this.displayForm.indexOf(row);
+    for (const control of row.children) {
       index++;
-      this.displayForm.controls.splice(index, 0, control);
+      this.displayForm.splice(index, 0, control);
     }
-    this.displayForm.controls = this.displayForm.controls.slice();
-    row.get('opened').setValue(true);
+    this.displayForm = this.displayForm.slice();
+    row.opened = true;
     // this.displayData();
   }
 
   closeGroup(group: any, column: any, row: any) {
-    const groupIndex = this.groupList.indexOf(group);
-    const children = this.displayForm.controls.filter(x => {
-      for (let i = 0 ; i <= groupIndex; i++) {
-        if (x.get('data').get(this.columns[i].name).value !== row.get('data').get(this.columns[i].name).value ||
-         (x.get('group').value === true && x.get('level').value <= groupIndex))  {
-          return false;
-        }
-      }
-      return true;
+    // const groupIndex = this.groupList.indexOf(group);
+    // const children = this.displayForm.filter(x => {
+    //   for (let i = 0 ; i <= groupIndex; i++) {
+    //     if (x.data.get(this.columns[i].name).value !== row.data.get(this.columns[i].name).value ||
+    //      (x.group === true && x.level <= groupIndex))  {
+    //       return false;
+    //     }
+    //   }
+    //   return true;
+    // });
+    // row.children = children;
+    console.log(row);
+    row.children.forEach(x => {
+      this.displayForm = this.displayForm.filter(y => x !== y);
     });
-    row.get('children').controls = children;
-    children.forEach(x => {
-      this.displayForm.controls = this.displayForm.controls.filter(y => x !== y);
-    });
-    row.get('opened').setValue(false);
+    row.opened = false;
   }
 
   trackByIdx(i) {

@@ -1,7 +1,9 @@
-import { FormBuilder, FormControl, FormArray } from '@angular/forms';
+import { FormBuilder, FormControl, FormArray, FormGroup } from '@angular/forms';
 
 export interface GridRow {
-    data: FormControl;
+    data: FormGroup;
     group: boolean;
-    opened: boolean;
+    opened?: boolean;
+    level?: number;
+    children?: GridRow[];
 }
