@@ -5,8 +5,8 @@
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$compeat-app-primary: mat-palette($mat-gray, 800);
-$compeat-app-accent:  mat-palette($mat-orange);
+$compeat-app-primary: mat-palette($mat-orange, A200);
+$compeat-app-accent:  mat-palette($mat-green, A400, A200, A700);
 
 // The warn palette is optional (defaults to red).
 $compeat-app-warn:    mat-palette($mat-red);
