@@ -1,6 +1,6 @@
 <div [class]="_template" [style.height]="height">
   <div class="component-container">
-    <div class="flex-container">
+    <!-- <div class="flex-container">
       <mat-slide-toggle (change)="changeEdit($event)" class="flex">
         Edit
       </mat-slide-toggle>
@@ -10,11 +10,17 @@
       <div class="flex">
         Number of Columns: {{columns?.length}}
       </div>
-    </div>
+    </div> -->
     <div class="flex-container">
-      <mat-form-field class="header" appearance="standard">
-        <input matInput type="text" matInput placeholder="Search" [formControl]="searchForm">
-      </mat-form-field>
+      <div class="flex search-container">
+        <mat-form-field class="header" appearance="standard">
+          <input matInput type="text" matInput placeholder="Search" [formControl]="searchForm">
+          <mat-hint>{{displayForm.length}} Rows</mat-hint>
+        </mat-form-field>
+      </div>
+      <mat-slide-toggle (change)="changeEdit($event)" >
+        Edit
+      </mat-slide-toggle>
     </div>
     <div cdkDropList cdkDropListOrientation="horizontal" class="header-list" (cdkDropListDropped)="drop($event)">
       <div *ngFor="let group of groupList" class="header-box"></div>
