@@ -2,6 +2,7 @@
 <div mat-dialog-content>
     <form class="grid-container" [formGroup]="filterForm">
         <mat-form-field appearance="standard" class="form-field">
+            <mat-label>Text Filters</mat-label>
             <mat-select formControlName="filter">
                 <mat-option *ngFor="let filter of filters" [value]="filter">
                     {{filter}}
