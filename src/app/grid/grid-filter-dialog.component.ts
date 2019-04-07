@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FormBuilder, FormControl, FormArray, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormArray, FormGroup, Validators } from '@angular/forms';
 
 @Component({
     selector: 'app-grid-filter-dialog',
@@ -22,12 +22,17 @@ export class GridFilterDialogComponent {
             columnTitle: [data.columnTitle],
             columnName: [data.columnName],
             filter: ['Contains'],
-            value: ['']
+            value: ['', [Validators.required]]
         });
     }
 
     onNoClick(): void {
         this.dialogRef.close();
     }
+
+    getErrorMessage(controlName: string) {
+        return this.filterForm.get(controlName).hasError('required') ? 'You must enter a value' :
+                '';
+      }
 
 }

@@ -42,6 +42,7 @@ export class GridComponent implements OnInit {
   groupForm: GridRow[] = [];
   itemSize = 80;
   _template: string;
+  filterList: any[] = [];
   @Input()
   set template(input: string) {
     this._template = input;
@@ -112,15 +113,20 @@ export class GridComponent implements OnInit {
   }
 
   filterData() {
-    if (!this.displayForm || !this.searchForm.value) {
+    if (!this.displayForm || (!this.searchForm.value && this.filterList.length === 0)) {
       return null;
     }
     this.displayForm = this.displayForm.filter(row =>
       Object.values(row.data.value)
-      .map(value => String(value)
-      .indexOf(this.searchForm.value) >= 0)
+      .map(value => String(value).indexOf(this.searchForm.value) >= 0)
       .filter(x => x === true)
       .length > 0);
+    for (const filter of this.filterList) {
+      if (filter.type === 'Contains') {
+        this.displayForm = this.displayForm.filter(row =>
+          String(row.data.get(filter.name).value).indexOf(filter.value) >= 0);
+      }
+    }
   }
 
   sortData() {
@@ -220,13 +226,13 @@ export class GridComponent implements OnInit {
             level: groupIndex,
             children: []
           };
-          const foundGroup = this.groupForm.find(x => x.data.value === groupRow.data.value);
-          if (foundGroup) {
-            this.displayForm.splice(index, 0, foundGroup);
-          } else {
-            this.displayForm.splice(index, 0, groupRow);
-            this.groupForm.push(groupRow);
-          }
+          // const foundGroup = this.groupForm.find(x => x.data.value === groupRow.data.value);
+          // if (foundGroup) {
+          //   this.displayForm.splice(index, 0, foundGroup);
+          // } else {
+          //   this.displayForm.splice(index, 0, groupRow);
+          //   this.groupForm.push(groupRow);
+          // }
         }
         index++;
       }
@@ -239,16 +245,6 @@ export class GridComponent implements OnInit {
       let index = 0;
       for (const row of this.displayForm) {
         if (row.group === true && row.level === groupIndex) {
-          // const children = this.displayForm.filter(x => {
-          //   for (let i = 0 ; i <= groupIndex; i++) {
-          //     if (x.data.get(this.columns[i].name).value !== row.data.get(this.columns[i].name).value ||
-          //       (x.group === true && x.level <= groupIndex))  {
-          //       return false;
-          //     }
-          //   }
-          //   return true;
-          // });
-          // row.children = children;
           if (oldGroup) {
             oldGroup.children = this.displayForm
               .slice(oldGroupIndex + 1, index)
@@ -276,21 +272,10 @@ export class GridComponent implements OnInit {
     }
     this.displayForm = this.displayForm.slice();
     row.opened = true;
-    // this.displayData();
+    this.displayData();
   }
 
   closeGroup(group: any, column: any, row: any) {
-    // const groupIndex = this.groupList.indexOf(group);
-    // const children = this.displayForm.filter(x => {
-    //   for (let i = 0 ; i <= groupIndex; i++) {
-    //     if (x.data.get(this.columns[i].name).value !== row.data.get(this.columns[i].name).value ||
-    //      (x.group === true && x.level <= groupIndex))  {
-    //       return false;
-    //     }
-    //   }
-    //   return true;
-    // });
-    // row.children = children;
     console.log(row);
     row.children.forEach(x => {
       this.displayForm = this.displayForm.filter(y => x !== y);
@@ -310,7 +295,17 @@ export class GridComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
+      if (result) {
+        const newFilter = {
+          name: result.columnName,
+          type: result.filter,
+          value: result.value
+        };
+        this.filterList.push(newFilter);
+        const column = this.columns.find(x => x.name === newFilter.name);
+        column.filter = true;
+      }
+      this.displayData();
     });
   }
 }

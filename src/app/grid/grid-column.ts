@@ -4,4 +4,5 @@ export interface GridColumn {
     type: string;
     options: string[];
     sort: string;
+    filter?: boolean;
 }

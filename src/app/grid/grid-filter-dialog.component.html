@@ -10,11 +10,13 @@
             </mat-select>
         </mat-form-field>
         <mat-form-field appearance="standard" class="form-field">
+            <mat-label>Value</mat-label>
             <input matInput type="text" formControlName="value">
+            <mat-error *ngIf="filterForm.get('value').invalid">{{getErrorMessage('value')}}</mat-error>
         </mat-form-field>
     </form>
 </div>
 <div mat-dialog-actions class="flex-container">
   <button mat-button class="flex" (click)="onNoClick()">Cancel</button>
-  <button mat-raised-button color="primary" class="flex" [mat-dialog-close]="filterForm.value" cdkFocusInitial>Filter</button>
+  <button mat-raised-button color="primary" class="flex" [disabled]="filterForm.invalid" [mat-dialog-close]="filterForm.value" cdkFocusInitial>Filter</button>
 </div>
