@@ -226,13 +226,13 @@ export class GridComponent implements OnInit {
             level: groupIndex,
             children: []
           };
-          // const foundGroup = this.groupForm.find(x => x.data.value === groupRow.data.value);
-          // if (foundGroup) {
-          //   this.displayForm.splice(index, 0, foundGroup);
-          // } else {
-          //   this.displayForm.splice(index, 0, groupRow);
-          //   this.groupForm.push(groupRow);
-          // }
+          const foundGroup = this.groupForm.find(x => x.data.value === groupRow.data.value);
+          if (foundGroup) {
+            this.displayForm.splice(index, 0, foundGroup);
+          } else {
+            this.displayForm.splice(index, 0, groupRow);
+            this.groupForm.push(groupRow);
+          }
         }
         index++;
       }
