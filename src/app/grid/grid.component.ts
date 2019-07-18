@@ -28,14 +28,11 @@ export class GridComponent implements OnInit {
 
   dataForm: GridRow[] = [];
   stick = false;
-  arr = new FormArray([]);
   @Input() height: string;
   @Input() columns: GridColumn[];
   @Input()
   set data(input: any[]) {
     this.populateForms(input);
-    this.arr.patchValue(input);
-    console.log(this.arr.value);
   }
   edit = false;
   searchForm = new FormControl('');
