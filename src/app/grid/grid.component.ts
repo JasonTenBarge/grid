@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl } from '@angular/forms';
+import { FormBuilder, FormControl, FormArray } from '@angular/forms';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { debounceTime } from 'rxjs/operators';
 import { GridColumn } from './grid-column';
@@ -17,22 +17,25 @@ import { GridRow } from './grid-row';
 
 export class GridComponent implements OnInit {
 
-  @ViewChild('grid')
+  @ViewChild('grid', { static: true })
   viewport: CdkVirtualScrollViewport;
 
-  @ViewChild('stickyColumn')
+  @ViewChild('stickyColumn', { static: false })
   stickyColumn: CdkVirtualScrollViewport;
 
-  @ViewChild('header')
+  @ViewChild('header', { static: false })
   header: CdkScrollable;
 
   dataForm: GridRow[] = [];
   stick = false;
+  arr = new FormArray([]);
   @Input() height: string;
   @Input() columns: GridColumn[];
   @Input()
   set data(input: any[]) {
     this.populateForms(input);
+    this.arr.patchValue(input);
+    console.log(this.arr.value);
   }
   edit = false;
   searchForm = new FormControl('');
